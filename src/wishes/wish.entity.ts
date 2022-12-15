@@ -1,6 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IsDate, IsNotEmpty, IsUrl, Length, Min } from "class-validator";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    JoinColumn,
+    ManyToOne, OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from 'typeorm';
+import { IsNotEmpty, IsUrl, Length, Min } from "class-validator";
 import {UserEntity} from "../users/user.entity";
+import {OfferEntity} from "../offers/offer.entity";
 
 @Entity()
 export class WishEntity {
@@ -41,25 +50,16 @@ export class WishEntity {
     @IsNotEmpty()
     copied: number;
 
-    @Column()
-    @IsDate()
-    @IsNotEmpty()
+    @CreateDateColumn()
     createdAt: Date;
 
-    @Column()
-    @IsDate()
-    @IsNotEmpty()
+    @UpdateDateColumn()
     updatedAt: Date;
 
-    @Column()
-    @IsNotEmpty()
+    @ManyToOne(() => UserEntity, (user) => user.wishes)
+    @JoinColumn()
     owner: UserEntity;
 
-    @Column()
-    @IsNotEmpty()
-    offers: [];
-
-    @Column()
-    @IsNotEmpty()
-    wishlists: [];
+    @OneToMany(()=> OfferEntity, offer => offer.id)
+    offers: OfferEntity[];
 }

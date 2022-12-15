@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { OffersModule } from './offers/offers.module';
 import { UserEntity } from './users/user.entity';
 import {WishEntity} from "./wishes/wish.entity";
+import {WishListEntity} from "./wishlists/wishList.entity";
+import {OfferEntity} from "./offers/offer.entity";
 
 
 @Module({
@@ -18,7 +20,7 @@ import {WishEntity} from "./wishes/wish.entity";
     username: 'student',
     password: 'student',
     database: 'nest_project',
-    entities: [UserEntity, WishEntity],
+    entities: [UserEntity, WishEntity, WishListEntity, OfferEntity],
     synchronize: true,
   }), WishesModule, WishlistsModule, UsersModule, OffersModule,],
   controllers: [AppController],
