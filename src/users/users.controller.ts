@@ -8,7 +8,10 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post('signup')
-  createUser(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
+  createUser(
+    @Body() createUserDto: CreateUserDto,
+    ParseIntPipe,
+  ): Promise<UserEntity> {
     return this.usersService.createUser(createUserDto);
   }
   // @Get('me')

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsNotEmpty, IsUrl, Length, Min } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUrl, Length, Min } from 'class-validator';
 import { UserEntity } from '../users/user.entity';
 import { OfferEntity } from '../offers/offer.entity';
 
@@ -37,18 +37,19 @@ export class WishEntity {
   @IsUrl()
   image: string;
 
-  @Column()
+  @Column({ type: 'decimal', scale: 2, default: 1 })
   @IsNotEmpty()
   @Min(1)
   price: number;
 
-  @Column()
+  @Column({ default: 1 })
+  @IsOptional()
   @IsNotEmpty()
   @Min(1)
   raised: number;
 
-  @Column()
-  @IsNotEmpty()
+  @Column({ default: 0 })
+  @IsOptional()
   copied: number;
 
   @CreateDateColumn()
