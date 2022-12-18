@@ -7,13 +7,6 @@ import { CreateUserDto } from './dto/createUserDto';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @Post('signup')
-  createUser(
-    @Body() createUserDto: CreateUserDto,
-    ParseIntPipe,
-  ): Promise<UserEntity> {
-    return this.usersService.createUser(createUserDto);
-  }
   // @Get('me')
   // getUser () : Promise<UserEntity> {
   //         return this.usersService.getUser();
