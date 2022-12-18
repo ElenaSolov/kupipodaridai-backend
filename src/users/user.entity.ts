@@ -17,12 +17,12 @@ export class UserEntity {
   id: number;
 
   @Column({ unique: true })
-  @Length(1, 64)
+  @Length(2, 30)
   @IsNotEmpty()
   username: string;
 
   @Column({ default: 'Пока ничего не рассказал о себе' })
-  @Length(1, 200)
+  @Length(2, 200)
   @IsNotEmpty()
   about: string;
 
