@@ -37,9 +37,9 @@ export class UsersService {
     }
     return newUser;
   }
-  // async getUser() : Promise<UserEntity> {
-  //     return
-  // }
+  findByUsername(username: string): Promise<UserEntity> {
+    return this.usersRepository.findOneBy({ username });
+  }
 
   // getById(id): Promise<UserEntity> {
   //     const found = this.tasksRepository.findOneBy({ id });
