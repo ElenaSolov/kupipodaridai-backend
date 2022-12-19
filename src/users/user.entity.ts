@@ -42,13 +42,15 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => WishEntity, (wish) => wish.owner)
+  @OneToMany(() => WishEntity, (wish) => wish.owner, { eager: true })
   wishes: WishEntity[];
 
-  @OneToMany(() => OfferEntity, (offer) => offer.user)
+  @OneToMany(() => OfferEntity, (offer) => offer.user, { eager: true })
   offers: OfferEntity[];
 
-  @OneToMany(() => WishListEntity, (wishlist) => wishlist.owner)
+  @OneToMany(() => WishListEntity, (wishlist) => wishlist.owner, {
+    eager: true,
+  })
   wishlists: WishListEntity[];
 
   @Column()
