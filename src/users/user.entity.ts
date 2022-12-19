@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { IsEmail, IsNotEmpty, IsUrl, Length, MinLength } from 'class-validator';
+import { Exclude } from 'class-transformer';
 import { WishEntity } from '../wishes/wish.entity';
 import { OfferEntity } from '../offers/offer.entity';
 import { WishListEntity } from '../wishlists/wishList.entity';
@@ -42,12 +43,15 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @Exclude()
   @OneToMany(() => WishEntity, (wish) => wish.owner, { eager: true })
   wishes: WishEntity[];
 
+  @Exclude()
   @OneToMany(() => OfferEntity, (offer) => offer.user, { eager: true })
   offers: OfferEntity[];
 
+  @Exclude()
   @OneToMany(() => WishListEntity, (wishlist) => wishlist.owner, {
     eager: true,
   })
@@ -55,5 +59,6 @@ export class UserEntity {
 
   @Column()
   @MinLength(2)
+  @Exclude()
   password: string;
 }
