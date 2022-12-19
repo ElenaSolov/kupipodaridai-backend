@@ -6,24 +6,29 @@ import { CreateUserDto } from '../users/dto/createUserDto';
 import { UsersService } from '../users/users.service';
 import { SigninUserDto } from '../users/dto/signinUserDto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { IJwtPayload } from './IJwtPayload';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(UsersService)
     private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signUp(createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 
-  async signIn(signinUserDto: SigninUserDto): Promise<string> {
+  async signIn(signinUserDto: SigninUserDto): Promise<{ accessToken: string }> {
     const { username, password } = signinUserDto;
     const user = await this.usersService.findByUsername(username);
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      return 'success';
+      const payload: IJwtPayload = { username };
+      const accessToken: string = await this.jwtService.sign(payload);
+      return { accessToken };
     } else {
       throw new UnauthorizedException('Please check your login details');
     }
