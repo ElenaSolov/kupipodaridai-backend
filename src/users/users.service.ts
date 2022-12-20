@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -17,10 +18,13 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
   ) {}
+  async getHashedPassword(password) {
+    const salt = await bcrypt.genSalt();
+    return await bcrypt.hash(password, salt);
+  }
   async createUser(createUserDto: CreateUserDto) {
     const { username, about, email, password, avatar } = createUserDto;
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await this.getHashedPassword(password);
     const newUser = this.usersRepository.create({
       username,
       about,
@@ -58,8 +62,18 @@ export class UsersService {
     id: number,
     updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
-    await this.usersRepository.update({ id }, updateUserDto);
-    return this.findByUserId(id);
+    const { password } = updateUserDto;
+    if (password) {
+      const hashedPassword = await this.getHashedPassword(password);
+      updateUserDto = { ...updateUserDto, password: hashedPassword };
+    }
+    try {
+      await this.usersRepository.update({ id }, updateUserDto);
+      return this.findByUserId(id);
+    } catch (err) {
+      console.log(err);
+      throw new BadRequestException(`${err.detail}`);
+    }
   }
   async findUserWishes(id: number) {
     const user = await this.findByUserId(id);
