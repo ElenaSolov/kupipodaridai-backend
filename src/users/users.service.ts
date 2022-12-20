@@ -6,8 +6,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './user.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/createUserDto';
+import { UpdateUserDto } from './dto/updateUserDto';
 
 @Injectable()
 export class UsersService {
@@ -38,7 +39,19 @@ export class UsersService {
     return newUser;
   }
   findByUsername(username: string): Promise<UserEntity> {
+    console.log(username);
     return this.usersRepository.findOneBy({ username });
+  }
+  findByUserId(id: number): Promise<UserEntity> {
+    console.log(id);
+    return this.usersRepository.findOneBy({ id });
+  }
+  async updateUser(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
+    await this.usersRepository.update({ id }, updateUserDto);
+    return this.findByUserId(id);
   }
 
   // getById(id): Promise<UserEntity> {

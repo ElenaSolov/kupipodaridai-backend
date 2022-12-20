@@ -23,10 +23,11 @@ export class AuthService {
 
   async signIn(signinUserDto: SigninUserDto): Promise<{ accessToken: string }> {
     const { username, password } = signinUserDto;
+    console.log(1, username);
     const user = await this.usersService.findByUsername(username);
-
+    console.log(2, user);
     if (user && (await bcrypt.compare(password, user.password))) {
-      const payload: IJwtPayload = { username };
+      const payload: IJwtPayload = { userId: user.id };
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };
     } else {
