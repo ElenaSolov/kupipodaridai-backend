@@ -53,7 +53,10 @@ export class UsersService {
     await this.usersRepository.update({ id }, updateUserDto);
     return this.findByUserId(id);
   }
-
+  async findUserWishes(id: number) {
+    const user = await this.findByUserId(id);
+    return user.wishes;
+  }
   // getById(id): Promise<UserEntity> {
   //     const found = this.tasksRepository.findOneBy({ id });
   //     if (!found) {
