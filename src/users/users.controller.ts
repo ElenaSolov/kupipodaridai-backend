@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -13,7 +21,7 @@ export class UsersController {
 
   @Get('me')
   getUser(@GetUser() user: UserEntity): Promise<UserEntity> {
-    return this.usersService.findByUsername(user.username);
+    return this.usersService.findByUserId(user.id);
   }
 
   @Patch('me')
@@ -27,5 +35,12 @@ export class UsersController {
   @Get('/me/wishes')
   getUserWishes(@GetUser() user: UserEntity): Promise<WishEntity[]> {
     return this.usersService.findUserWishes(user.id);
+  }
+
+  @Get(':username')
+  getUserByName(
+    @Param('username') username: string,
+  ): Promise<Partial<UserEntity>> {
+    return this.usersService.findByUsername(username);
   }
 }

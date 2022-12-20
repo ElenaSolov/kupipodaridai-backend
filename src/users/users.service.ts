@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -38,9 +39,16 @@ export class UsersService {
     }
     return newUser;
   }
-  findByUsername(username: string): Promise<UserEntity> {
+  async findByUsername(username: string): Promise<Partial<UserEntity>> {
     console.log(username);
-    return this.usersRepository.findOneBy({ username });
+    const user = await this.usersRepository.findOneBy({ username });
+    if (!user) {
+      throw new NotFoundException(`${username} does not exist`);
+    } else {
+      console.log(user);
+      const { email, password, wishes, offers, wishlists, ...rest } = user;
+      return rest;
+    }
   }
   findByUserId(id: number): Promise<UserEntity> {
     console.log(id);
