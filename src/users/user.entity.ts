@@ -43,15 +43,15 @@ export class UserEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   @OneToMany(() => WishEntity, (wish) => wish.owner, { eager: true })
   wishes: WishEntity[];
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   @OneToMany(() => OfferEntity, (offer) => offer.user, { eager: true })
   offers: OfferEntity[];
 
-  @Exclude()
+  @Exclude({ toPlainOnly: true })
   @OneToMany(() => WishListEntity, (wishlist) => wishlist.owner, {
     eager: true,
   })

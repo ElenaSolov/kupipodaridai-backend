@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from './user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -41,6 +33,13 @@ export class UsersController {
   getUserByName(
     @Param('username') username: string,
   ): Promise<Partial<UserEntity>> {
-    return this.usersService.findByUsername(username);
+    return this.usersService.findByUsernamePublic(username);
+  }
+
+  @Get(':username/wishes')
+  getUserWishesByUsername(
+    @Param('username') username: string,
+  ): Promise<WishEntity[]> {
+    return this.usersService.findUserWishesByUsername(username);
   }
 }

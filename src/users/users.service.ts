@@ -8,9 +8,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './user.entity';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUserDto';
 import { UpdateUserDto } from './dto/updateUserDto';
+import { WishEntity } from '../wishes/wish.entity';
 
 @Injectable()
 export class UsersService {
@@ -18,10 +19,12 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
   ) {}
+
   async getHashedPassword(password) {
     const salt = await bcrypt.genSalt();
     return await bcrypt.hash(password, salt);
   }
+
   async createUser(createUserDto: CreateUserDto) {
     const { username, about, email, password, avatar } = createUserDto;
     const hashedPassword = await this.getHashedPassword(password);
@@ -43,21 +46,27 @@ export class UsersService {
     }
     return newUser;
   }
-  async findByUsername(username: string): Promise<Partial<UserEntity>> {
-    console.log(username);
+
+  async findByUsernamePrivate(username: string): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({ username });
     if (!user) {
       throw new NotFoundException(`${username} does not exist`);
     } else {
-      console.log(user);
-      const { email, password, wishes, offers, wishlists, ...rest } = user;
-      return rest;
+      return user;
     }
   }
+  async findByUsernamePublic(username: string): Promise<Partial<UserEntity>> {
+    const user = await this.findByUsernamePrivate(username);
+    console.log('user', user);
+    const { email, password, wishes, offers, wishlists, ...rest } = user;
+    return rest;
+  }
+
   findByUserId(id: number): Promise<UserEntity> {
     console.log(id);
     return this.usersRepository.findOneBy({ id });
   }
+
   async updateUser(
     id: number,
     updateUserDto: UpdateUserDto,
@@ -75,55 +84,16 @@ export class UsersService {
       throw new BadRequestException(`${err.detail}`);
     }
   }
-  async findUserWishes(id: number) {
+
+  async findUserWishes(id: number): Promise<WishEntity[]> {
     const user = await this.findByUserId(id);
     return user.wishes;
   }
-  // getById(id): Promise<UserEntity> {
-  //     const found = this.tasksRepository.findOneBy({ id });
-  //     if (!found) {
-  //         throw new NotFoundException('task not found');
-  //     }
-  //     return found;
-  // }
-  // getTasksWithFilter(filterDto: GetTasksFilterDto): ITask[] {
-  //   const { search, status } = filterDto;
-  //   console.log(status);
-  //   let tasks = this.tasks;
-  //   if (search) {
-  //     tasks = tasks.filter((task) => {
-  //       return (
-  //         task.title.toLowerCase().includes(search.toLowerCase()) ||
-  //         task.description.toLowerCase().includes(search.toLowerCase())
-  //       );
-  //     });
-  //   }
-  //   if (status) {
-  //     tasks = tasks.filter((task) => task.status === status);
-  //     console.log(tasks);
-  //   }
-  //   return tasks;
-  // }
-  //
-  // async createUser(createTaskDto: CreateTaskDto): Promise<TaskEntity> {
-  //     const { title, description } = createTaskDto;
-  //     const newTask = this.tasksRepository.create({
-  //         title,
-  //         description,
-  //         status: TaskStatus.OPEN,
-  //     });
-  //     await this.tasksRepository.save(newTask);
-  //     return newTask;
-  // }
-  // updateTask(id: string, status: TaskStatus): ITask {
-  //   const task = this.getById(id);
-  //   task.status = status;
-  //   return task;
-  // }
-  // async deleteTask(id: string): Promise<void> {
-  //     const result = await this.tasksRepository.delete({ id });
-  //     if (result.affected === 0) {
-  //         throw new NotFoundException(`Task with ID: ${id} not found`);
-  //     }
-  // }
+
+  async findUserWishesByUsername(username: string): Promise<WishEntity[]> {
+    const user = await this.findByUsernamePrivate(username);
+    console.log(user);
+    console.log(user.wishes);
+    return user.wishes;
+  }
 }
