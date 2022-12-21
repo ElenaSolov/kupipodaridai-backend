@@ -57,7 +57,7 @@ export class UsersService {
   }
   async getByUsernamePublic(username: string): Promise<Partial<UserEntity>> {
     const user = await this.getByUsernamePrivate(username);
-    console.log('user', user);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email, password, wishes, offers, wishlists, ...rest } = user;
     return rest;
   }
