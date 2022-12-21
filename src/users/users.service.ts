@@ -47,7 +47,7 @@ export class UsersService {
     return newUser;
   }
 
-  async findByUsernamePrivate(username: string): Promise<UserEntity> {
+  async getByUsernamePrivate(username: string): Promise<UserEntity> {
     const user = await this.usersRepository.findOneBy({ username });
     if (!user) {
       throw new NotFoundException(`${username} does not exist`);
@@ -55,14 +55,14 @@ export class UsersService {
       return user;
     }
   }
-  async findByUsernamePublic(username: string): Promise<Partial<UserEntity>> {
-    const user = await this.findByUsernamePrivate(username);
+  async getByUsernamePublic(username: string): Promise<Partial<UserEntity>> {
+    const user = await this.getByUsernamePrivate(username);
     console.log('user', user);
     const { email, password, wishes, offers, wishlists, ...rest } = user;
     return rest;
   }
 
-  findByUserId(id: number): Promise<UserEntity> {
+  getByUserId(id: number): Promise<UserEntity> {
     console.log(id);
     return this.usersRepository.findOneBy({ id });
   }
@@ -78,22 +78,27 @@ export class UsersService {
     }
     try {
       await this.usersRepository.update({ id }, updateUserDto);
-      return this.findByUserId(id);
+      return this.getByUserId(id);
     } catch (err) {
       console.log(err);
       throw new BadRequestException(`${err.detail}`);
     }
   }
 
-  async findUserWishes(id: number): Promise<WishEntity[]> {
-    const user = await this.findByUserId(id);
+  async getUserWishes(id: number): Promise<WishEntity[]> {
+    const user = await this.getByUserId(id);
     return user.wishes;
   }
 
-  async findUserWishesByUsername(username: string): Promise<WishEntity[]> {
-    const user = await this.findByUsernamePrivate(username);
-    console.log(user);
-    console.log(user.wishes);
+  async getUserWishesByUsername(username: string): Promise<WishEntity[]> {
+    const user = await this.getByUsernamePrivate(username);
     return user.wishes;
+  }
+
+  getUsersByUsernameOrEmail(findUsersDto): Promise<UserEntity[]> {
+    const { query } = findUsersDto;
+    return this.usersRepository.find({
+      where: [{ email: query }, { username: query }],
+    });
   }
 }
