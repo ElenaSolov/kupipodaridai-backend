@@ -16,7 +16,6 @@ export class WishesService {
   }
 
   async createWish(createWishDto: CreateWishDto): Promise<WishEntity> {
-    console.log(createWishDto);
     const { name, image, link, price, description } = createWishDto;
     const newWish = this.wishesRepository.create({
       name,
@@ -27,5 +26,12 @@ export class WishesService {
     });
     await this.wishesRepository.save(newWish);
     return newWish;
+  }
+  getLast(): Promise<WishEntity[]> {
+    return this.wishesRepository.find({
+      where: {},
+      order: { createdAt: 'DESC' },
+      take: Number(40),
+    });
   }
 }
