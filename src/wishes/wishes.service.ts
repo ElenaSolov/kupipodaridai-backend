@@ -54,7 +54,6 @@ export class WishesService {
       where: { id: wishId },
       relations: ['owner', 'offers'],
     });
-    console.log('wish', wish);
     if (!wish) {
       throw new NotFoundException(`Wish with id ${wishId} does not exist`);
     }
