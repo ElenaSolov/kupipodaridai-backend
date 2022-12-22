@@ -63,7 +63,6 @@ export class UsersService {
   }
 
   getByUserId(id: number): Promise<UserEntity> {
-    console.log(id);
     return this.usersRepository.findOneBy({ id });
   }
 
@@ -80,7 +79,6 @@ export class UsersService {
       await this.usersRepository.update({ id }, updateUserDto);
       return this.getByUserId(id);
     } catch (err) {
-      console.log(err);
       throw new BadRequestException(`${err.detail}`);
     }
   }

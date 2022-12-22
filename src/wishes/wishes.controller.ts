@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -56,5 +57,14 @@ export class WishesController {
     @Body() updateWishDto: UpdateWishDto,
   ): Promise<WishEntity> {
     return this.wishesService.updateWish(wishId, user, updateWishDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  deleteWish(
+    @Param('id') wishId: number,
+    @GetUser() user,
+  ): Promise<{ message: string }> {
+    return this.wishesService.removeOne(wishId, user);
   }
 }

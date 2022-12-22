@@ -49,11 +49,20 @@ export class WishesService {
       take: Number(20),
     });
   }
-  getWishById(id: number): Promise<WishEntity> {
-    return this.wishesRepository.findOne({
-      where: { id },
+  async getWishById(wishId: number): Promise<WishEntity> {
+    const wish = await this.wishesRepository.findOne({
+      where: { id: wishId },
       relations: ['owner'],
     });
+    console.log('wish', wish);
+    if (!wish) {
+      throw new NotFoundException(`Wish with id ${wishId} does not exist`);
+    }
+    return wish;
+  }
+  checkOwner(wish, user): boolean {
+    console.log(wish.owner.id === user.id);
+    return wish.owner.id === user.id;
   }
   async updateWish(
     wishId: number,
@@ -61,17 +70,26 @@ export class WishesService {
     updateWishDto: UpdateWishDto,
   ): Promise<WishEntity> {
     const wish = await this.getWishById(wishId);
-    console.log(100, wish);
-    if (!wish) {
-      throw new NotFoundException(`Wish with id ${wishId} does not exist`);
-    } else if (wish.owner.id !== user.id) {
+    if (!this.checkOwner(wish, user)) {
       throw new UnauthorizedException('You can update only your own wishes');
     } else {
       try {
         await this.wishesRepository.update({ id: wishId }, updateWishDto);
         return this.getWishById(wishId);
       } catch (err) {
-        console.log(err);
+        throw new BadRequestException(`${err.detail}`);
+      }
+    }
+  }
+  async removeOne(wishId, user): Promise<{ message: string }> {
+    const wish = await this.getWishById(wishId);
+    if (!this.checkOwner(wish, user)) {
+      throw new UnauthorizedException('You can delete only your own wishes');
+    } else {
+      try {
+        await this.wishesRepository.delete(wishId);
+        return { message: `Wish with id ${wishId} was successfully removed` };
+      } catch (err) {
         throw new BadRequestException(`${err.detail}`);
       }
     }
