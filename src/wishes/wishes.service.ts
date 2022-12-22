@@ -50,7 +50,10 @@ export class WishesService {
     });
   }
   getWishById(id: number): Promise<WishEntity> {
-    return this.wishesRepository.findOneBy({ id });
+    return this.wishesRepository.findOne({
+      where: { id },
+      relations: ['owner'],
+    });
   }
   async updateWish(
     wishId: number,
