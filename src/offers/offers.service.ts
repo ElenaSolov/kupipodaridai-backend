@@ -20,6 +20,13 @@ export class OffersService {
     private readonly wishesService: WishesService,
   ) {}
 
+  getAll(): Promise<OfferEntity[]> {
+    return this.offersRepository.find({
+      where: {},
+      relations: ['user', 'item'],
+    });
+  }
+
   async createOffer(
     createOfferDto: CreateOfferDto,
     user: UserEntity,
