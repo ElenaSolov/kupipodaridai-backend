@@ -51,10 +51,10 @@ export class WishesController {
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   updateWish(
-    @Param('id') id: number,
+    @Param('id') wishId: number,
     @GetUser() user: UserEntity,
     @Body() updateWishDto: UpdateWishDto,
   ): Promise<WishEntity> {
-    return this.wishesService.updateWish(id, user, updateWishDto);
+    return this.wishesService.updateWish(wishId, user, updateWishDto);
   }
 }

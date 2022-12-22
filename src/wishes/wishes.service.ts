@@ -53,19 +53,20 @@ export class WishesService {
     return this.wishesRepository.findOneBy({ id });
   }
   async updateWish(
-    id: number,
+    wishId: number,
     user: UserEntity,
     updateWishDto: UpdateWishDto,
   ): Promise<WishEntity> {
-    const wish = await this.getWishById(id);
+    const wish = await this.getWishById(wishId);
+    console.log(100, wish);
     if (!wish) {
-      throw new NotFoundException(`Wish with id ${id} does not exist`);
+      throw new NotFoundException(`Wish with id ${wishId} does not exist`);
     } else if (wish.owner.id !== user.id) {
       throw new UnauthorizedException('You can update only your own wishes');
     } else {
       try {
-        await this.wishesRepository.update({ id }, updateWishDto);
-        return this.getWishById(id);
+        await this.wishesRepository.update({ id: wishId }, updateWishDto);
+        return this.getWishById(wishId);
       } catch (err) {
         console.log(err);
         throw new BadRequestException(`${err.detail}`);
