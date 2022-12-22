@@ -22,7 +22,7 @@ export class WishesService {
     return this.wishesRepository.find();
   }
 
-  async createWish(createWishDto: CreateWishDto): Promise<WishEntity> {
+  async createWish(createWishDto: CreateWishDto, user): Promise<WishEntity> {
     const { name, image, link, price, description } = createWishDto;
     const newWish = this.wishesRepository.create({
       name,
@@ -30,6 +30,7 @@ export class WishesService {
       link,
       price,
       description,
+      owner: user,
     });
     await this.wishesRepository.save(newWish);
     return newWish;

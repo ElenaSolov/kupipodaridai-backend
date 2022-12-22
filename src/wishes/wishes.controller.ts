@@ -41,8 +41,11 @@ export class WishesController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  createWish(@Body() createWishDto: CreateWishDto): Promise<WishEntity> {
-    return this.wishesService.createWish(createWishDto);
+  createWish(
+    @Body() createWishDto: CreateWishDto,
+    @GetUser() user: UserEntity,
+  ): Promise<WishEntity> {
+    return this.wishesService.createWish(createWishDto, user);
   }
 
   @Patch(':id')
