@@ -61,7 +61,6 @@ export class WishesService {
     return wish;
   }
   checkOwner(wish, user): boolean {
-    console.log(wish.owner.id === user.id);
     return wish.owner.id === user.id;
   }
   async updateWish(
@@ -93,5 +92,14 @@ export class WishesService {
         throw new BadRequestException(`${err.detail}`);
       }
     }
+  }
+  async copyWish(wishId, user): Promise<WishEntity> {
+    const wish = await this.getWishById(wishId);
+    if (this.checkOwner(wish, user)) {
+      throw new BadRequestException('You can not copy your own wishes');
+    }
+    const newWish = await this.createWish({ ...wish }, user);
+    this.wishesRepository.update({ id: wishId }, { copied: wish.copied + 1 });
+    return newWish;
   }
 }

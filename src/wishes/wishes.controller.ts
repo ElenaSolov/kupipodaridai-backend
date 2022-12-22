@@ -67,4 +67,10 @@ export class WishesController {
   ): Promise<{ message: string }> {
     return this.wishesService.removeOne(wishId, user);
   }
+
+  @Post(':id/copy')
+  @UseGuards(AuthGuard('jwt'))
+  copyWish(@Param('id') wishId: number, @GetUser() user): Promise<WishEntity> {
+    return this.wishesService.copyWish(wishId, user);
+  }
 }
