@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { WishEntity } from './wish.entity';
 import { CreateWishDto } from './dto/createWishDto';
@@ -16,6 +16,16 @@ export class WishesController {
   @Get('last')
   getLast(): Promise<WishEntity[]> {
     return this.wishesService.getLast();
+  }
+  @Get('top')
+  getTop(): Promise<WishEntity[]> {
+    return this.wishesService.getTop();
+  }
+
+  @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
+  getWishById(@Param('id') id: string): Promise<WishEntity> {
+    return this.wishesService.getWishById(id);
   }
 
   @Post()

@@ -34,4 +34,14 @@ export class WishesService {
       take: Number(40),
     });
   }
+  getTop(): Promise<WishEntity[]> {
+    return this.wishesRepository.find({
+      where: {},
+      order: { copied: 'DESC' },
+      take: Number(20),
+    });
+  }
+  getWishById(id): Promise<WishEntity> {
+    return this.wishesRepository.findOneBy({ id });
+  }
 }
