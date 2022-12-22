@@ -71,6 +71,8 @@ export class WishesService {
     const wish = await this.getWishById(wishId);
     if (!this.checkOwner(wish, user)) {
       throw new UnauthorizedException('You can update only your own wishes');
+    } else if (wish.raised > 1) {
+      throw new BadRequestException('You can not change wish that has offers');
     } else {
       try {
         await this.wishesRepository.update({ id: wishId }, updateWishDto);
@@ -79,6 +81,12 @@ export class WishesService {
         throw new BadRequestException(`${err.detail}`);
       }
     }
+  }
+  updateWishRaised(wish: WishEntity, amount: number) {
+    return this.wishesRepository.update(
+      { id: wish.id },
+      { raised: wish.raised + amount },
+    );
   }
   async removeOne(wishId, user): Promise<{ message: string }> {
     const wish = await this.getWishById(wishId);

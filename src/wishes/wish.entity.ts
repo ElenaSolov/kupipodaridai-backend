@@ -42,7 +42,7 @@ export class WishEntity {
   @Min(1)
   price: number;
 
-  @Column({ default: 1 })
+  @Column({ default: 0 })
   @IsOptional()
   @IsNotEmpty()
   @Min(1)
