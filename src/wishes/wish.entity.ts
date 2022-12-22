@@ -62,6 +62,6 @@ export class WishEntity {
   @JoinColumn()
   owner: UserEntity;
 
-  @OneToMany(() => OfferEntity, (offer) => offer.id)
+  @OneToMany(() => OfferEntity, (offer) => offer.item)
   offers: OfferEntity[];
 }

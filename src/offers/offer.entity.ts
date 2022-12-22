@@ -17,7 +17,8 @@ export class OfferEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => WishEntity, (wish) => wish.link)
+  @ManyToOne(() => WishEntity)
+  @JoinColumn()
   item: WishEntity;
 
   @Column()

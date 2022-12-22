@@ -52,7 +52,7 @@ export class WishesService {
   async getWishById(wishId: number): Promise<WishEntity> {
     const wish = await this.wishesRepository.findOne({
       where: { id: wishId },
-      relations: ['owner'],
+      relations: ['owner', 'offers'],
     });
     console.log('wish', wish);
     if (!wish) {
