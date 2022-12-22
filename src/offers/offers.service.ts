@@ -3,6 +3,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -26,6 +27,19 @@ export class OffersService {
       where: {},
       relations: ['user', 'item'],
     });
+  }
+
+  async getOfferById(id): Promise<OfferEntity> {
+    const offer = await this.offersRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['item', 'user'],
+    });
+    if (!offer) {
+      throw new NotFoundException(`Offer with id ${id} does not exist`);
+    }
+    return offer;
   }
 
   async createOffer(

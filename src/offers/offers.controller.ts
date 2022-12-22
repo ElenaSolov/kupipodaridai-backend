@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateOfferDto } from './dto/createOfferDto';
 import { OfferEntity } from './offer.entity';
@@ -13,6 +13,11 @@ export class OffersController {
   @Get()
   getAllOffers(): Promise<OfferEntity[]> {
     return this.offersService.getAll();
+  }
+
+  @Get(':id')
+  getOfferById(@Param('id') id: string): Promise<OfferEntity> {
+    return this.offersService.getOfferById(id);
   }
 
   @Post()
