@@ -63,7 +63,15 @@ export class UsersService {
   }
 
   getByUserId(id: number): Promise<UserEntity> {
-    return this.usersRepository.findOneBy({ id });
+    const user = this.usersRepository.findOne({
+      where: { id },
+      relations: ['wishlists', 'wishes', 'offers'],
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} does not exist`);
+    } else {
+      return user;
+    }
   }
 
   async updateUser(
