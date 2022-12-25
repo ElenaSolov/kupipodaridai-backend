@@ -8,7 +8,7 @@ import { UsersModule } from './users/users.module';
 import { OffersModule } from './offers/offers.module';
 import { UserEntity } from './users/user.entity';
 import { WishEntity } from './wishes/wish.entity';
-import { WishListEntity } from './wishlists/wishList.entity';
+import { WishlistEntity } from './wishlists/wishlist.entity';
 import { OfferEntity } from './offers/offer.entity';
 import { AuthModule } from './auth/auth.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -22,7 +22,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       username: 'student',
       password: 'student',
       database: 'nest_project',
-      entities: [UserEntity, WishEntity, WishListEntity, OfferEntity],
+      entities: [UserEntity, WishEntity, WishlistEntity, OfferEntity],
       synchronize: true,
     }),
     WishesModule,

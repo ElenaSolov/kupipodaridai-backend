@@ -3,17 +3,17 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsNotEmpty, IsUrl, Length } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsUrl, Length } from 'class-validator';
 import { UserEntity } from '../users/user.entity';
 import { WishEntity } from '../wishes/wish.entity';
 
 @Entity()
-export class WishListEntity {
+export class WishlistEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -22,7 +22,8 @@ export class WishListEntity {
   @IsNotEmpty()
   name: string;
 
-  @Column()
+  @Column({ default: '' })
+  @IsOptional()
   @Length(0, 1500)
   description: string;
 
@@ -36,10 +37,11 @@ export class WishListEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.wishlists)
+  @ManyToOne(() => UserEntity, (user) => user.id)
   @JoinColumn()
   owner: UserEntity;
 
-  @OneToMany(() => WishEntity, (wish) => wish.id)
-  items: WishEntity[];
+  @ManyToMany(() => WishEntity, (wish) => wish.id)
+  @JoinColumn()
+  items: number[];
 }

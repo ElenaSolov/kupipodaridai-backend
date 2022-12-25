@@ -10,7 +10,7 @@ import { IsEmail, IsNotEmpty, IsUrl, Length, MinLength } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { WishEntity } from '../wishes/wish.entity';
 import { OfferEntity } from '../offers/offer.entity';
-import { WishListEntity } from '../wishlists/wishList.entity';
+import { WishlistEntity } from '../wishlists/wishlist.entity';
 
 @Entity()
 export class UserEntity {
@@ -49,10 +49,10 @@ export class UserEntity {
   @OneToMany(() => OfferEntity, (offer) => offer.user, { eager: true })
   offers: OfferEntity[];
 
-  @OneToMany(() => WishListEntity, (wishlist) => wishlist.owner, {
+  @OneToMany(() => WishlistEntity, (wishlist) => wishlist.owner, {
     eager: true,
   })
-  wishlists: WishListEntity[];
+  wishlists: WishlistEntity[];
 
   @Column()
   @MinLength(2)
