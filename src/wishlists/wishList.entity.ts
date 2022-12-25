@@ -40,6 +40,6 @@ export class WishListEntity {
   @JoinColumn()
   owner: UserEntity;
 
-  @OneToMany(() => WishEntity, (wish) => wish.link)
+  @OneToMany(() => WishEntity, (wish) => wish.id)
   items: WishEntity[];
 }
