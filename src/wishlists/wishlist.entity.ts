@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -37,11 +38,10 @@ export class WishlistEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.id)
-  @JoinColumn()
+  @ManyToOne(() => UserEntity, (user) => user.wishlists)
   owner: UserEntity;
 
   @ManyToMany(() => WishEntity, (wish) => wish.id)
-  @JoinColumn()
-  items: number[];
+  @JoinTable()
+  items: WishEntity[];
 }

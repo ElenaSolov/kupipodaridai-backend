@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { AuthGuard } from '@nestjs/passport';
 import { WishlistEntity } from './wishlist.entity';
@@ -14,6 +14,11 @@ export class WishlistsController {
   @Get()
   getWishlists(): Promise<WishlistEntity[]> {
     return this.wishlistService.getWishlists();
+  }
+
+  @Get(':id')
+  getWishlistById(@Param('id') id: string): Promise<WishlistEntity> {
+    return this.wishlistService.getWishlistById(id);
   }
 
   @Post()
