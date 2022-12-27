@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -69,7 +70,7 @@ export class WishesService {
   ): Promise<WishEntity> {
     const wish = await this.getWishById(wishId);
     if (!this.checkOwner(wish, user)) {
-      throw new UnauthorizedException('You can update only your own wishes');
+      throw new ForbiddenException('You can update only your own wishes');
     } else if (wish.raised > 0) {
       throw new BadRequestException('You can not change wish that has offers');
     } else {
@@ -90,7 +91,7 @@ export class WishesService {
   async removeOne(wishId, user): Promise<{ message: string }> {
     const wish = await this.getWishById(wishId);
     if (!this.checkOwner(wish, user)) {
-      throw new UnauthorizedException('You can delete only your own wishes');
+      throw new ForbiddenException('You can delete only your own wishes');
     } else {
       try {
         await this.wishesRepository.delete(wishId);

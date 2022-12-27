@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -49,7 +50,7 @@ export class OffersService {
     const { amount, hidden, itemId } = createOfferDto;
     const wish = await this.wishesService.getWishById(itemId);
     if (this.wishesService.checkOwner(wish, user)) {
-      throw new BadRequestException(
+      throw new ForbiddenException(
         'You can not make offers for your own wishes',
       );
     }
