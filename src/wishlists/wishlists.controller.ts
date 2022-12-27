@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { AuthGuard } from '@nestjs/passport';
 import { WishlistEntity } from './wishlist.entity';
@@ -37,5 +37,13 @@ export class WishlistsController {
     @Param('id') id: string
   ) : Promise<WishlistEntity> {
     return this.wishlistService.updateWishlist(user, updateWishlistDto, +id);
+  }
+
+  @Delete(':id')
+  deleteWish(
+    @Param('id') id: number,
+    @GetUser() user,
+  ): Promise<{ message: string }> {
+    return this.wishlistService.removeOne(id, user);
   }
 }

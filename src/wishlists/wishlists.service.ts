@@ -67,4 +67,18 @@ export class WishlistsService {
       }
     }
   }
+
+  async removeOne(id, user): Promise<{ message: string }> {
+    const wishlist = await this.getWishlistById(id);
+    if (wishlist.owner.id !== user.id) {
+      throw new UnauthorizedException('You can delete only your own wishes');
+    } else {
+      try {
+        await this.wishlistRepository.delete(id);
+        return { message: `Wish with id ${id} was successfully removed` };
+      } catch (err) {
+        throw new BadRequestException(`${err.detail}`);
+      }
+    }
+  }
 }
