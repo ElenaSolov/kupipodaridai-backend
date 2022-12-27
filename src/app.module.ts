@@ -17,7 +17,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({load: [config]}),
+    ConfigModule.forRoot({ load: [config] }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: config().db.host,

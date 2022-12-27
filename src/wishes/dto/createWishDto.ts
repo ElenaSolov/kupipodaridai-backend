@@ -1,4 +1,4 @@
-import { IsOptional, IsUrl, Length, Min } from 'class-validator';
+import { IsOptional, IsUrl, Length } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateWishDto {

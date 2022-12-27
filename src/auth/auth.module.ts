@@ -10,7 +10,7 @@ import config from '../config/config';
 
 @Module({
   imports: [
-  ConfigModule.forFeature(config),
+    ConfigModule.forFeature(config),
     UsersModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({ secret: 'secret', signOptions: { expiresIn: 36000 } }),

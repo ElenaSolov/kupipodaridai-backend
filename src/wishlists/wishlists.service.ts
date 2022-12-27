@@ -1,4 +1,9 @@
-import {BadRequestException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { WishlistEntity } from './wishlist.entity';
 import { Repository } from 'typeorm';
@@ -44,22 +49,23 @@ export class WishlistsService {
         owner: user,
       });
       return await this.wishlistRepository.save(newWishlist);
-    } catch (err){
+    } catch (err) {
       console.log(err);
       throw new BadRequestException(`${err.detail}`);
     }
   }
   async updateWishlist(
-    user: UserEntity, 
-    updateWishlistDto: UpdateWishlistDto, 
-    id: number) : Promise<WishlistEntity> {
+    user: UserEntity,
+    updateWishlistDto: UpdateWishlistDto,
+    id: number,
+  ): Promise<WishlistEntity> {
     const wishlist = await this.getWishlistById(id);
     if (wishlist.owner.id !== user.id) {
       throw new ForbiddenException('You can update only your own wishlists');
     } else {
       try {
         const { itemsId, ...rest } = updateWishlistDto;
-        const items = itemsId.map(id => ({id} as WishlistEntity))
+        const items = itemsId.map((id) => ({ id } as WishlistEntity));
         await this.wishlistRepository.save({ id, ...rest, items });
         return this.getWishlistById(wishlist.id);
       } catch (err) {

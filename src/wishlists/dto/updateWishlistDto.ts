@@ -1,4 +1,10 @@
-import { IsArray, IsNotEmpty, IsOptional, IsUrl, Length } from "class-validator";
+import {
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsUrl,
+  Length,
+} from 'class-validator';
 
 export class UpdateWishlistDto {
   @IsOptional()

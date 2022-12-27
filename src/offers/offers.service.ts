@@ -54,7 +54,9 @@ export class OffersService {
         'You can not make offers for your own wishes',
       );
     } else if (wish.raised + amount > wish.price) {
-      throw new BadRequestException(`You can offer up to ${wish.price - wish.raised} for this offer`);
+      throw new BadRequestException(
+        `You can offer up to ${wish.price - wish.raised} for this offer`,
+      );
     }
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

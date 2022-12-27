@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { WishlistsService } from './wishlists.service';
 import { AuthGuard } from '@nestjs/passport';
 import { WishlistEntity } from './wishlist.entity';
@@ -20,7 +29,7 @@ export class WishlistsController {
   @Get(':id')
   getWishlistById(@Param('id') id: string): Promise<WishlistEntity> {
     return this.wishlistService.getWishlistById(id);
-  } 
+  }
 
   @Post()
   createWishlist(
@@ -29,13 +38,13 @@ export class WishlistsController {
   ): Promise<WishlistEntity> {
     return this.wishlistService.createWishlist(user, createWishlistDto);
   }
-  
+
   @Patch(':id')
   updateWishlist(
     @GetUser() user: UserEntity,
     @Body() updateWishlistDto: UpdateWishlistDto,
-    @Param('id') id: string
-  ) : Promise<WishlistEntity> {
+    @Param('id') id: string,
+  ): Promise<WishlistEntity> {
     return this.wishlistService.updateWishlist(user, updateWishlistDto, +id);
   }
 
